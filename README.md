@@ -46,6 +46,8 @@ Permite a un cliente liquidar una factura existente.
 * Ejecuta una transferencia cruzada (Cross-Program Invocation - CPI) usando el `SystemProgram` para mover los fondos del cliente a la cuenta del comercio.
 * Actualiza el estado del PDA a `is_paid = true`.
 
+> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
+
 ## 🚀 Cómo probar en Solana Playground
 
 Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana, la forma más rápida de probarlo es utilizando [Solana Playground](https://beta.solpg.io/).
@@ -56,7 +58,6 @@ Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana
 4. En la pestaña **Build & Deploy**:
    * Haz clic en **Build** para compilar el contrato.
    * Haz clic en **Deploy** para subirlo a la Devnet.
-5. (Opcional) Exporta el archivo `idl.json` generado para integrarlo con cualquier frontend cliente (ej. Next.js).
 
 ## 👨‍💻 Autor
 **Sergio Loera** - Desarrollador del Smart Contract.

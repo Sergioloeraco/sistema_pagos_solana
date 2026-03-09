@@ -21,34 +21,12 @@ El esquema de datos (`PaymentState`) reserva espacio específico para los siguie
 * `description` (String): El concepto del pago.
 * `is_paid` (bool): Bandera que indica si el cobro ya fue liquidado.
 
-## ⚙️ Instrucciones del Programa
+## 🔑 Program ID (`declare_id!`)
 
-El Smart Contract expone dos métodos principales (RPC endpoints):
+En la raíz del contrato (`lib.rs`), el programa está vinculado a una dirección pública específica mediante la macro de Anchor:
 
-### 1. `create_payment`
-Permite a un usuario (comercio) inicializar un nuevo cobro.
-* Deriva un PDA único usando la semilla `b"payment"`, la `authority` y el `id` de la factura.
-* Asigna los valores iniciales y establece `is_paid = false`.
-* El creador paga por el alquiler del espacio de almacenamiento en la red (Rent).
-
-### 2. `pay`
-Permite a un cliente liquidar una factura existente.
-* Localiza el PDA exacto mediante las semillas.
-* Verifica que el estado actual sea `is_paid == false` para evitar cobros dobles (Manejo de errores: `AlreadyPaid`).
-* Ejecuta una transferencia cruzada (Cross-Program Invocation - CPI) usando el `SystemProgram` para mover los fondos del cliente a la cuenta del comercio.
-* Actualiza el estado del PDA a `is_paid = true`.
-
-## 🚀 Cómo probar en Solana Playground
-
-Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana, la forma más rápida de probarlo es utilizando [Solana Playground](https://beta.solpg.io/).
-
-1. Abre Solana Playground y crea un nuevo proyecto seleccionando el framework **Anchor (Rust)**.
-2. Copia el contenido del archivo `lib.rs` de este repositorio y pégalo en tu entorno.
-3. Conecta tu billetera de desarrollo (ej. Phantom en Devnet) en la esquina inferior izquierda.
-4. En la pestaña **Build & Deploy**:
-   * Haz clic en **Build** para compilar el contrato.
-   * Haz clic en **Deploy** para subirlo a la Devnet.
-5. (Opcional) Exporta el archivo `idl.json` generado para integrarlo con cualquier frontend cliente (ej. Next.js).
+```rust
+declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
 
 ## 👨‍💻 Autor
 **Sergio Loera** - Desarrollador del Smart Contract.

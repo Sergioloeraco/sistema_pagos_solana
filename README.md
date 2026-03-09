@@ -1,86 +1,54 @@
-# Primeros pasos en Solana
-![Banner](./images/SolanaBanner.jpg)
-Solana es una blockchain de capa 1, es decir, cuenta con su propia infraestructura y no depende de otras blockchains para funcionar. Se encuentra orientada al alto rendimiento, y fue creada para soportar aplicaciones descentralizadas a gran escala con costos mínimos y confirmaciones casi inmediatas. Su diseño prioriza la eficiencia en la ejecución y la paralelización de transacciones.
+# 💸 Sistema de Pagos Descentralizado en Solana (Smart Contract)
 
-Rust es el lenguaje principal para desarrollar programas en Solana. A través de él se implementa la lógica on-chain utilizando el modelo de cuentas y programas de la red, permitiendo construir contratos inteligentes seguros, eficientes y altamente optimizables.
+Este repositorio contiene el backend (Smart Contract) para un sistema de enlaces de pago Web3 construido en la blockchain de Solana. El objetivo de este contrato es eliminar a los intermediarios en transacciones digitales, permitiendo a los comercios generar links de cobro y recibir el saldo directamente en sus billeteras (Peer-to-Peer) con comisiones mínimas de red y liquidación en segundos.
 
-Puedes comenzar dándole Fork a este repositorio (abajo te explicamos como 👇)
+## 🛠️ Tecnologías Utilizadas
 
-Asegúrate de clonar este repositorio a tu cuenta usando el botón **`Fork`**.
+* **Lenguaje:** Rust
+* **Framework:** Anchor (v0.29.0+)
+* **Red:** Solana Devnet
+* **Entorno de Desarrollo:** Solana Playground
 
-![fork](./images/fork.png)
+## 🏗️ Arquitectura y Estado (PDAs)
 
-* Puedes renombrar el repositorio a lo que sea que se ajuste con tu proyecto.
+A diferencia de las bases de datos tradicionales, este contrato utiliza **Program Derived Addresses (PDAs)** para almacenar el estado de cada cobro de manera inmutable en la blockchain.
 
-## Solana Playground
-Solana Playground es un entorno de desarrollo online que permite escribir, compilar, desplegar y probar programas de Solana directamente desde el navegador, sin necesidad de instalar herramientas locales como Rust, Solana CLI o Anchor.
+El esquema de datos (`PaymentState`) reserva espacio específico para los siguientes campos:
 
-![Playground](./images/playground.png)
+* `authority` (Pubkey): La llave pública del creador del cobro (quien recibe los fondos).
+* `id` (String): Identificador único de la factura (ej. "factura-001").
+* `amount` (u64): El monto a cobrar, expresado en Lamports.
+* `description` (String): El concepto del pago.
+* `is_paid` (bool): Bandera que indica si el cobro ya fue liquidado.
 
-Para abrir el **Playground** solo es necesario dar clic 👉 [Aquí](https://beta.solpg.io)
+## ⚙️ Instrucciones del Programa
 
-## Configuración del entorno
+El Smart Contract expone dos métodos principales (RPC endpoints):
 
-Primero conectaremos el entorno con la devnet, lo que tambien procederá a la creación de una wallet. Para eso daremos clic en donde dice **Not Conected**:
+### 1. `create_payment`
+Permite a un usuario (comercio) inicializar un nuevo cobro.
+* Deriva un PDA único usando la semilla `b"payment"`, la `authority` y el `id` de la factura.
+* Asigna los valores iniciales y establece `is_paid = false`.
+* El creador paga por el alquiler del espacio de almacenamiento en la red (Rent).
 
-![playground1](./images/playground1.png)
+### 2. `pay`
+Permite a un cliente liquidar una factura existente.
+* Localiza el PDA exacto mediante las semillas.
+* Verifica que el estado actual sea `is_paid == false` para evitar cobros dobles (Manejo de errores: `AlreadyPaid`).
+* Ejecuta una transferencia cruzada (Cross-Program Invocation - CPI) usando el `SystemProgram` para mover los fondos del cliente a la cuenta del comercio.
+* Actualiza el estado del PDA a `is_paid = true`.
 
-Saldrá la siguiente ventana donde daremos en el botón **Continue**:
+## 🚀 Cómo probar en Solana Playground
 
-![wallet](./images/wallet.png)
+Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana, la forma más rápida de probarlo es utilizando [Solana Playground](https://beta.solpg.io/).
 
-Como resultado se mostrará la siguiente información:
+1. Abre Solana Playground y crea un nuevo proyecto seleccionando el framework **Anchor (Rust)**.
+2. Copia el contenido del archivo `lib.rs` de este repositorio y pégalo en tu entorno.
+3. Conecta tu billetera de desarrollo (ej. Phantom en Devnet) en la esquina inferior izquierda.
+4. En la pestaña **Build & Deploy**:
+   * Haz clic en **Build** para compilar el contrato.
+   * Haz clic en **Deploy** para subirlo a la Devnet.
+5. (Opcional) Exporta el archivo `idl.json` generado para integrarlo con cualquier frontend cliente (ej. Next.js).
 
-![status](./images/status.png)
-
-* En verde: el estado de la conexión y el entorno al que se encuentra conectado
-
-* En amarillo: la la dirección de la wallet conectada
-
-* En azul: la cantidad de tokens en la wallet
-
-> ℹ️ ¿Quieres ver el ejemplo de un "Hola Mundo" en Solana?. Da clic aquí: 👉 [Ver Ejemplo](./build-deploy/README.md)
-
-> ℹ️ ¿Cuentas con una Wallet de [Phantom](https://phantom.com/) que deseas importar?, Da clic aquí para ver como hacerlo: 
-
-👉 [Como Importar una Wallet](./import-key-a-playground/README.md)
-
-## ¿Listo para empezar?
-
-El primer paso es hacer `fork` al repositorio. Ya con el repositorio en tu cuenta lo siguiente que debes hacer es entrar a la carpeta `proyecto` y obtener el `permalink`:
-
-![permalink](./images/permalink.png)
-
-El cual uniremos con el siguiente enlace en nuestro navegador de preferencia:
-
-```url
-https://beta.solpg.io/
-```
-
-Lo que nos dará algo parecido a:
-
-![url](./images/url.png)
-
-Al pulsar enter seremos enviados al `Solana Playground` con nuestro proyecto abierto:
-
-![pg](./images/pg.png)
-
-Para guardarlo solo damos clic en el boton `import` y asignamos un nombre:
-
-![import](./images/import.png)
-
-## ¿Como actualizo mi repositorio?
-
-Una vez que realices cambios o termines tu proyecto, es necesario que **copies todo el código**, ya con el código en el portapapeles nos dirigimos nuevamente a la carpeta proyecto de tu repositorio de github **donde se obtuvo el `permalink`**, donde entraremos al carpeta `src` y al archivo `lib.rs`:
-
-![edit](./images/edit.png)
-
-En `lib.rs` presionaremos el ícono en forma de lapiz (esquina superior derecha de la imagen 👆)
-
-Nuevamente seleccionamos todo el código pero ahora presionamos `ctrl + v` para pegar el código del `Playground`. Ya realizados los cambios presionamos el botón `Commit changes`:
-
-![commit](./images/commit.png)
-
-Nos aparecerá un menú de confirmación donde nuevamente presionamos el botón `Commit changes`:
-
-![commit2](./images/commit2.png)
+## 👨‍💻 Autor
+**Sergio Loera** - Desarrollador del Smart Contract.

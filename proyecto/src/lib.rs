@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::system_program;
 
 // Este ID se generará automáticamente en Solana Playground
-declare_id!("11111111111111111111111111111111");
+declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
 
 #[program]
 pub mod solana_payment_links {
@@ -10,20 +10,24 @@ pub mod solana_payment_links {
 
     // Función para crear un "Link de Pago" en la blockchain
     pub fn create_payment(
-        ctx: Context<CreatePayment>, 
-        id: String, 
-        amount: u64, 
-        description: String
+        ctx: Context<CreatePayment>,
+        id: String,
+        amount: u64,
+        description: String,
     ) -> Result<()> {
         let payment = &mut ctx.accounts.payment;
-        
-        payment.authority = ctx.accounts.authority.key(); // Creador del link
-        payment.id = id;                                  // Identificador único (ej. "factura-001")
-        payment.amount = amount;                          // Monto en Lamports (1 SOL = 1,000,000,000 Lamports)
-        payment.description = description;                // Descripción del pago
-        payment.is_paid = false;                          // Estado inicial
 
-        msg!("Pago creado: {} por {} lamports", payment.id, payment.amount);
+        payment.authority = ctx.accounts.authority.key(); // Creador del link
+        payment.id = id; // Identificador único (ej. "factura-001")
+        payment.amount = amount; // Monto en Lamports (1 SOL = 1,000,000,000 Lamports)
+        payment.description = description; // Descripción del pago
+        payment.is_paid = false; // Estado inicial
+
+        msg!(
+            "Pago creado: {} por {} lamports",
+            payment.id,
+            payment.amount
+        );
         Ok(())
     }
 
@@ -68,10 +72,10 @@ pub struct CreatePayment<'info> {
         bump
     )]
     pub payment: Account<'info, PaymentState>,
-    
+
     #[account(mut)]
     pub authority: Signer<'info>, // Quien crea y paga el espacio del cobro
-    
+
     pub system_program: Program<'info, System>,
 }
 
@@ -86,14 +90,14 @@ pub struct Pay<'info> {
         has_one = authority, // Seguridad: Garantiza que la autoridad sea la dueña del cobro
     )]
     pub payment: Account<'info, PaymentState>,
-    
+
     /// CHECK: Es la cuenta que recibe el dinero (no necesitamos ejecutar código en ella)
     #[account(mut)]
     pub authority: AccountInfo<'info>,
-    
+
     #[account(mut)]
     pub payer: Signer<'info>, // El cliente que está pagando
-    
+
     pub system_program: Program<'info, System>,
 }
 

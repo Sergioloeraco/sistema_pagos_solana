@@ -28,6 +28,7 @@ En la raíz del contrato (`lib.rs`), el programa está vinculado a una direcció
 ```rust
 declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
 ```
+> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
 
 ## ⚙️ Instrucciones del Programa
 
@@ -45,8 +46,6 @@ Permite a un cliente liquidar una factura existente.
 * Verifica que el estado actual sea `is_paid == false` para evitar cobros dobles (Manejo de errores: `AlreadyPaid`).
 * Ejecuta una transferencia cruzada (Cross-Program Invocation - CPI) usando el `SystemProgram` para mover los fondos del cliente a la cuenta del comercio.
 * Actualiza el estado del PDA a `is_paid = true`.
-
-> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
 
 ## 🚀 Cómo probar en Solana Playground
 

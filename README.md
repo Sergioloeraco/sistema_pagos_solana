@@ -27,6 +27,7 @@ En la raíz del contrato (`lib.rs`), el programa está vinculado a una direcció
 
 ```rust
 declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
+```
 
 ## ⚙️ Instrucciones del Programa
 

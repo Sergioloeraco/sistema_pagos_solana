@@ -28,7 +28,6 @@ En la raíz del contrato (`lib.rs`), el programa está vinculado a una direcció
 ```rust
 declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
 ```
-> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
 
 ## ⚙️ Instrucciones del Programa
 
@@ -57,6 +56,8 @@ Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana
 4. En la pestaña **Build & Deploy**:
    * Haz clic en **Build** para compilar el contrato.
    * Haz clic en **Deploy** para subirlo a la Devnet.
+
+> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
 
 ## 👨‍💻 Autor
 **Sergio Loera** - Desarrollador del Smart Contract.

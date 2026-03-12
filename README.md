@@ -9,8 +9,6 @@ Este repositorio contiene el backend (Smart Contract) para un sistema de enlaces
 * **Red:** Solana Devnet
 * **Entorno de Desarrollo:** Solana Playground
 
-## 🏗️ Arquitectura y Estado (PDAs)
-
 ## 🏗️ Arquitectura C.R.U.D. y Estado (PDAs)
 
 Este proyecto implementa una arquitectura **C.R.U.D. (Create, Read, Update, Delete)** 100% nativa en Web3. A diferencia de las bases de datos tradicionales, este contrato utiliza **Program Derived Addresses (PDAs)** para almacenar el estado de cada cobro de manera inmutable en la blockchain.

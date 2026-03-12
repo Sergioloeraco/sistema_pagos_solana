@@ -35,7 +35,7 @@ declare_id!("3s1VNMLu4ahyqT1FwxxCsPNH9hfBAFyWNGkhwPApswMD");
 
 El Smart Contract expone dos métodos principales (RPC endpoints):
 
-### 1. `create_payment`
+### 1. `create_payment` (Create)
 Permite a un usuario (comercio) inicializar un nuevo cobro.
 * Deriva un PDA único usando la semilla `b"payment"`, la `authority` y el `id` de la factura.
 * Asigna los valores iniciales y establece `is_paid = false`.

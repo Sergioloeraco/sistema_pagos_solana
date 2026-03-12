@@ -69,7 +69,7 @@ Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana
    * Haz clic en **Deploy** para subirlo a la Devnet.
 5. Pruebas UI (Test Tab): Una vez desplegado, puedes ir a la pestaña del ícono de matraz (Test). Ahí verás mapeadas automáticamente tus Instructions (createPayment, pay, deletePayment) y Accounts (PaymentState) para interactuar con ellas directamente desde la interfaz gráfica.
 
-> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
+> 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/3s1VNMLu4ahyqT1FwxxCsPNH9hfBAFyWNGkhwPApswMD?cluster=devnet)**.
 
 ## 👨‍💻 Autor
 **Sergio Loera** - Desarrollador del Smart Contract.

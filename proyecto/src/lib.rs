@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::system_program;
 
 // Este ID se generará automáticamente en Solana Playground
-declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
+declare_id!("3s1VNMLu4ahyqT1FwxxCsPNH9hfBAFyWNGkhwPApswMD");
 
 #[program]
 pub mod solana_payment_links {
@@ -54,6 +54,14 @@ pub mod solana_payment_links {
         msg!("Pago completado con éxito");
         Ok(())
     }
+
+    // Función para eliminar un link de pago y recuperar el Rent
+    pub fn delete_payment(_ctx: Context<DeletePayment>, _id: String) -> Result<()> {
+        // Al usar el modificador "close" en el struct, Anchor se encarga de todo.
+        // Borra los datos del PDA y le devuelve los Lamports a la autoridad.
+        msg!("Registro de pago eliminado y Rent recuperado exitosamente.");
+        Ok(())
+    }
 }
 
 // ----------------------------------------------------
@@ -99,6 +107,22 @@ pub struct Pay<'info> {
     pub payer: Signer<'info>, // El cliente que está pagando
 
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+#[instruction(id: String)]
+pub struct DeletePayment<'info> {
+    #[account(
+        mut,
+        seeds =[b"payment", authority.key().as_ref(), id.as_bytes()],
+        bump,
+        close = authority, // ¡Aquí ocurre la magia del Delete!
+        has_one = authority, // Solo el creador puede borrarlo
+    )]
+    pub payment: Account<'info, PaymentState>,
+
+    #[account(mut)]
+    pub authority: Signer<'info>, // Debe firmar la transacción para autorizar el borrado
 }
 
 // ----------------------------------------------------

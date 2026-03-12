@@ -11,7 +11,9 @@ Este repositorio contiene el backend (Smart Contract) para un sistema de enlaces
 
 ## 🏗️ Arquitectura y Estado (PDAs)
 
-A diferencia de las bases de datos tradicionales, este contrato utiliza **Program Derived Addresses (PDAs)** para almacenar el estado de cada cobro de manera inmutable en la blockchain.
+## 🏗️ Arquitectura C.R.U.D. y Estado (PDAs)
+
+Este proyecto implementa una arquitectura **C.R.U.D. (Create, Read, Update, Delete)** 100% nativa en Web3. A diferencia de las bases de datos tradicionales, este contrato utiliza **Program Derived Addresses (PDAs)** para almacenar el estado de cada cobro de manera inmutable en la blockchain.
 
 El esquema de datos (`PaymentState`) reserva espacio específico para los siguientes campos:
 
@@ -26,7 +28,7 @@ El esquema de datos (`PaymentState`) reserva espacio específico para los siguie
 En la raíz del contrato (`lib.rs`), el programa está vinculado a una dirección pública específica mediante la macro de Anchor:
 
 ```rust
-declare_id!("CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX");
+declare_id!("3s1VNMLu4ahyqT1FwxxCsPNH9hfBAFyWNGkhwPApswMD");
 ```
 
 ## ⚙️ Instrucciones del Programa
@@ -39,12 +41,21 @@ Permite a un usuario (comercio) inicializar un nuevo cobro.
 * Asigna los valores iniciales y establece `is_paid = false`.
 * El creador paga por el alquiler del espacio de almacenamiento en la red (Rent).
 
-### 2. `pay`
+### 2. Lectura de Estado (Read)
+* El frontend cliente interactúa directamente con la cuenta `PaymentState` consultando la blockchain en tiempo real para extraer los datos de la factura antes de procesar el pago.
+
+### 3. `pay` (Update)
 Permite a un cliente liquidar una factura existente.
 * Localiza el PDA exacto mediante las semillas.
 * Verifica que el estado actual sea `is_paid == false` para evitar cobros dobles (Manejo de errores: `AlreadyPaid`).
 * Ejecuta una transferencia cruzada (Cross-Program Invocation - CPI) usando el `SystemProgram` para mover los fondos del cliente a la cuenta del comercio.
-* Actualiza el estado del PDA a `is_paid = true`.
+* Actualiza el estado del PDA a `is_paid = true.`
+
+### 4. `deletePayment` (Delete)
+* Permite al creador del link eliminar el registro si hubo un error o si ya no es necesario.
+* Valida criptográficamente mediante `has_one = authority` que solo el dueño legítimo pueda borrar la factura.
+* Utiliza el modificador `close` de Anchor para destruir el PDA inmutablemente.
+* Reembolsa automáticamente los Lamports del Rent (alquiler de espacio) de vuelta a la billetera del comercio.
 
 ## 🚀 Cómo probar en Solana Playground
 
@@ -56,6 +67,7 @@ Dado que este proyecto fue desarrollado nativamente para el ecosistema de Solana
 4. En la pestaña **Build & Deploy**:
    * Haz clic en **Build** para compilar el contrato.
    * Haz clic en **Deploy** para subirlo a la Devnet.
+5. Pruebas UI (Test Tab): Una vez desplegado, puedes ir a la pestaña del ícono de matraz (Test). Ahí verás mapeadas automáticamente tus Instructions (createPayment, pay, deletePayment) y Accounts (PaymentState) para interactuar con ellas directamente desde la interfaz gráfica.
 
 > 🔍 **Evidencia de Despliegue:** Puedes verificar este Smart Contract ejecutándose en vivo, así como su historial de transacciones, directamente en el **[Solana Explorer (Devnet)](https://explorer.solana.com/address/CtjdcPu9eLVSWD5vTKhjXasmviNGccqAojoeDx5CNETX?cluster=devnet)**.
 
